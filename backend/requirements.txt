@@ -1,0 +1,7 @@
+﻿fastapi
+uvicorn[standard]
+pydantic-settings
+supabase
+PyJWT
+pytest
+httpx
