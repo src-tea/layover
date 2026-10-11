@@ -1,8 +1,12 @@
 import { findAirport } from '../data/airports';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8001/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8001/api' : '');
 
 export async function apiFetch(path, options = {}) {
+  if (!API_BASE_URL) {
+    throw new Error('The LAYOVER API is not configured for this deployment.');
+  }
+
   const authToken = localStorage.getItem('layover-auth-token');
   const response = await fetch(`${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`, {
     headers: {

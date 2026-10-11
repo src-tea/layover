@@ -27,10 +27,11 @@ export default function StoragePage({ airportCode = 'DEL', onSelectStorage }) {
         if (!isCurrent) return;
         const localQuotes = storageFacilities.find((facility) => facility.airportCode === airportCode && facility.quoteOnly)?.quoteTiers || [];
         setProviderPrices(localQuotes);
-        setPriceStatus(localQuotes.length ? 'provider_quoted' : error.status === 404 ? 'unavailable' : 'error');
+        const noApiConfigured = error.message?.includes('API is not configured');
+        setPriceStatus(localQuotes.length ? 'provider_quoted' : (error.status === 404 || noApiConfigured) ? 'unavailable' : 'error');
         setPriceMessage(localQuotes.length
           ? 'Showing the bundled provider quote; refresh when online.'
-          : error.status === 404
+          : (error.status === 404 || noApiConfigured)
             ? 'No verified provider quote is available for this airport.'
             : error.message);
       });
